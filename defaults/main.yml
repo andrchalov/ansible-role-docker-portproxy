@@ -1,0 +1,17 @@
+---
+portproxy_path: "/srv/portproxy"
+portproxy_docker_image: "nginx:alpine"
+portproxy_docker_name: portproxy
+portproxy_docker_volumes:
+  - "{{portproxy_path}}/nginx.conf:/etc/nginx/nginx.conf:ro"
+  # - "{{portproxy_path}}/ssl:/mnt/ssl:ro"
+
+portproxy_docker_volumes_extra: []
+
+portproxy_rules: []
+portproxy_allow: null
+
+portproxy_nginx_worker_processes: 1
+portproxy_nginx_worker_connections: 1024
+portproxy_nginx_sendfile: "on"
+portproxy_nginx_keepalive_timeout: 65

@@ -1,0 +1,6 @@
+---
+- name: restart portproxy
+  shell: >
+    docker restart {{portproxy_docker_name}} && echo 'yes'
+  register: __restart_portproxy
+  changed_when: (__restart_portproxy.stdout_lines | last) == 'yes'

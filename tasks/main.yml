@@ -1,0 +1,24 @@
+---
+- name: create portproxy folder
+  file:
+    dest={{portproxy_path}}
+    state=directory
+  notify: restart portproxy
+
+- name: create nginx config
+  template:
+    src=nginx.conf.j2
+    dest={{portproxy_path}}/nginx.conf
+  notify: restart portproxy
+
+- name: portproxy container installed
+  docker_container:
+    name: "{{portproxy_docker_name}}"
+    image: "{{portproxy_docker_image}}"
+    volumes: "{{portproxy_docker_volumes}}"
+    network_mode: "host"
+    restart_policy: always
+    pull: true
+    state: started
+
+- meta: flush_handlers

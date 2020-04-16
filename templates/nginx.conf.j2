@@ -1,0 +1,32 @@
+
+user  nginx nginx;
+worker_processes {{portproxy_nginx_worker_processes}};
+
+events {
+  worker_connections {{portproxy_nginx_worker_connections}};
+  use epoll;
+}
+
+http {
+  sendfile {{portproxy_nginx_sendfile}};
+
+  keepalive_timeout  {{portproxy_nginx_keepalive_timeout}};
+
+
+  {% for rule in portproxy_rules %}
+  server {
+    listen {{rule.listen}};
+
+    {% if portproxy_allow %}
+    {% for item in portproxy_allow %}
+    allow {{item}};
+    {% endfor %}
+    deny all;
+    {% endif %}
+
+    location ~ / {
+      proxy_pass {{rule.forward}};
+    }
+  }
+  {% endfor %}
+}
